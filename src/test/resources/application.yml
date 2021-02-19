@@ -1,0 +1,75 @@
+---
+tcb:
+  app:
+    name: cobranca
+  port: 8084
+  profiles:
+    active: test
+  log:
+    level: DEBUG
+  i18n:
+    enable: false
+
+ws:
+  tcb:
+    processador: http://tcbprocessador:8425
+  google:
+    basePath: https://billpaynotification.sandbox.googleapis.com/secure-serving/gsp/
+    #basePath: https://billpaynotification.googleapis.com/secure-serving/gsp/
+
+pgp:
+  local:
+    certificate:
+      tcb:
+        privateKey: tcb-uat-privatekey.asc
+        publicKey: tcb-uat-publickey.asc
+      google:
+        publicKey: google-uat-publickey.asc
+    passwordPrivateKey: totvs@123
+
+jasypt:
+  encryptor:
+    password: 8fca80be-16ec-47e1-8eb1-678fcc9ed05a
+# logging
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr([${tcb.app.name}]){magenta}%clr(%X{contexto}){magenta}%clr(%X{cdTransacao}){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr([${tcb.app.name}]){magenta}%clr(%X{contexto}){magenta}%clr(%X{cdTransacao}){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  level:
+    root: INFO
+    br:
+      com:
+        totvs:
+          tcb: ${tcb.log.level}
+    org:
+      hibernate:
+        type: TRACE
+app:
+  i18n:
+    enable: ${tcb.i18n.enable}
+  build:
+    version: 1.0.0
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    password:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    initialization-mode: always
+  flyway:
+    enabled: false
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    showSql: true
+  profiles:
+    active: test

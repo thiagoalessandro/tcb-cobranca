@@ -1,0 +1,8 @@
+---
+spring:
+  application:
+    name: tcb
+management:
+  health:
+    consul:
+      enabled: false
