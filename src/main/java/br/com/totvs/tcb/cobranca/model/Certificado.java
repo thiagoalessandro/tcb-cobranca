@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = false)
-@ToString
+@ToString(callSuper = true)
 @Table(name = "tbl_certificado")
 @NoArgsConstructor
 public class Certificado extends AbstractEntity {

@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = false)
-@ToString
+@ToString(callSuper = true)
 @Table(name = "tbl_conta_integradora_cfop")
 @NoArgsConstructor
 public class ContaIntegradoraCfop extends AbstractEntity {

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @ApiModel
 @NoArgsConstructor
-public class SolicitacaoCfopRequestDTO extends BaseCfopRequestDTO {
+public class CobrancaCfopRequestDTO extends BaseCfopRequestDTO {
 
     private String paymentIntegratorAccountId;
     private String transactionDescription;

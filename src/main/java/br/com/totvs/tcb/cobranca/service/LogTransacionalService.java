@@ -44,8 +44,8 @@ public class LogTransacionalService {
         repository.save(logTransacional);
     }
 
-    public Optional<LogTransacional> findByFirstRequestId(String requestId) {
-        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "dataHoraInicio"));
+    public Optional<LogTransacional> findByLastRequestId(String requestId) {
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "dataHoraInicio"));
         List<LogTransacional> logTransacionais = repository.findByRequestId(requestId, pageable).getContent();
         if (logTransacionais.size() > 0)
             return Optional.of(logTransacionais.get(0));

@@ -6,7 +6,7 @@ import br.com.totvs.tcb.cobranca.controller.resource.ResourceCfopWSRest;
 import br.com.totvs.tcb.cobranca.domain.DominioRecurso;
 import br.com.totvs.tcb.cobranca.exceptions.CfopException;
 import br.com.totvs.tcb.cobranca.service.cfop.ConectividadeCfopService;
-import br.com.totvs.tcb.cobranca.service.cfop.SolicitacaoCfopService;
+import br.com.totvs.tcb.cobranca.service.cfop.CobrancaCfopService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoogleCfopController extends AbstractCfopController {
 
     private final ConectividadeCfopService conectividadeCfopService;
-    private final SolicitacaoCfopService solicitacaoCfopService;
+    private final CobrancaCfopService cobrancaCfopService;
 
     public GoogleCfopController(ConectividadeCfopService conectividadeCfopService,
-                                SolicitacaoCfopService solicitacaoCfopService) {
+                                CobrancaCfopService cobrancaCfopService) {
         this.conectividadeCfopService = conectividadeCfopService;
-        this.solicitacaoCfopService = solicitacaoCfopService;
+        this.cobrancaCfopService = cobrancaCfopService;
     }
 
     @PostMapping("/connectivityTest")
@@ -41,7 +41,7 @@ public class GoogleCfopController extends AbstractCfopController {
     @ApiOperation(value = "Generate Reference Number")
     @LogApp(recurso = DominioRecurso.SOLICITACAO)
     public ResponseEntity<String> generateReferenceNumber(@RequestBody String payload) throws CfopException {
-        return ResponseEntity.ok(solicitacaoCfopService.executor(payload));
+        return ResponseEntity.ok(cobrancaCfopService.executor(payload));
     }
 
 }

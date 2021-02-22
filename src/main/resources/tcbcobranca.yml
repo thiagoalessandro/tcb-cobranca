@@ -2,6 +2,9 @@
 tcb:
   app:
     name: cobranca
+  processador:
+    basePath: http://localhost:8085/tcbprocessador/api
+    apiKey: 7FD52D4025756AFBE89DE91A93CCF33020C6699906F44B97071430FC39A1CD9D
   database:
     name: db_tcb_cobranca
     username: ENC(INvBkchPXKUAa6FFg3UXPw==)
@@ -20,8 +23,6 @@ tcb:
     enable: false
 
 ws:
-  tcb:
-    processador: http://localhost:8085/tcbprocessador/api
   google:
     basePath: https://billpaynotification.sandbox.googleapis.com/secure-serving/gsp/
     #basePath: https://billpaynotification.googleapis.com/secure-serving/gsp/
@@ -88,4 +89,4 @@ server:
 info:
   build:
     version: ${app.build.version}
-trace: true
+trace: false

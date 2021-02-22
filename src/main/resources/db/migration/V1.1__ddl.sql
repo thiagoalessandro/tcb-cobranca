@@ -88,28 +88,30 @@ create index idx_conta_integradora_cfop_id_cnta_intg on tbl_conta_integradora_cf
                                   Solicitação CFOP
 **********************************************************************************/
 
-create table tbl_solicitacao_cfop
+create table tbl_cobranca_cfop
 (
-    id_sol_cfop       bigserial                   not null
-        constraint pk_solicitacao_cfop
+    id_cob_cfop       bigserial                   not null
+        constraint pk_cobranca_cfop
             primary key,
     id_cnta_intg_cfop bigint
-        constraint fk_solicitacao_cfop_conta_integradora_cfop
+        constraint fk_cobranca_cfop_conta_integradora_cfop
             references tbl_conta_integradora_cfop not null,
-    ds_trn            varchar(255)                not null,
+    ds_transacao      varchar(255)                not null,
     cd_moeda          varchar(3)                  not null,
-    vr_sol            numeric(18, 2)              not null,
-    num_ref           varchar(50),
+    vr_cobranca       numeric(18, 2)              not null,
     prt_vrs_revisao   smallint                    not null,
     prt_vrs_menor     smallint                    not null,
     prt_vrs_maior     smallint                    not null,
     req_id            varchar(36)                 not null,
     req_time          timestamp                   not null,
+    linha_digitavel   varchar(47)                 not null,
+    nosso_numero      varchar(20)                 not null,
+    cod_barras        varchar(44)                 not null,
     trace_id          varchar(20)                 not null,
     cd_usu_atu        varchar(25)                 not null,
     dh_atu            timestamp                   not null,
     id_sit            varchar(1)                  not null
 );
 
-create index idx_solicitacao_cfop_req_id on tbl_solicitacao_cfop (req_id);
-create index idx_solicitacao_cfop_trace_id on tbl_solicitacao_cfop (trace_id);
+create index idx_cobranca_cfop_req_id on tbl_cobranca_cfop (req_id);
+create index idx_cobranca_cfop_trace_id on tbl_cobranca_cfop (trace_id);

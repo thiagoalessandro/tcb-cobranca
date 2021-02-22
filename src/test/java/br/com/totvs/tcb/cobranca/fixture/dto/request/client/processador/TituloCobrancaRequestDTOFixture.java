@@ -1,4 +1,4 @@
-package br.com.totvs.tcb.cobranca.fixture.dto.request;
+package br.com.totvs.tcb.cobranca.fixture.dto.request.client.processador;
 
 import br.com.totvs.tcb.cobranca.client.processador.dto.request.TituloCobrancaRequestDTO;
 import br.com.totvs.tcb.cobranca.domain.DominioEspecieTitulo;
@@ -7,12 +7,13 @@ import br.com.totvs.tcb.cobranca.fixture.FixtureAbstract;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CobrancaBoletoRequestDTOFixture extends FixtureAbstract {
+public class TituloCobrancaRequestDTOFixture extends FixtureAbstract {
 
     public static TituloCobrancaRequestDTO valido() {
         TituloCobrancaRequestDTO tituloCobrancaRequestDTO = new TituloCobrancaRequestDTO();
-        tituloCobrancaRequestDTO.setCedente(CedenteBoletoRequestDTOFixture.valido());
-        tituloCobrancaRequestDTO.setSacado(SacadoBoletoRequestDTOFixture.valido());
+        tituloCobrancaRequestDTO.setControle(ControleRequestDTOFixture.valido());
+        tituloCobrancaRequestDTO.setCedente(CedenteTituloRequestDTOFixture.valido());
+        tituloCobrancaRequestDTO.setSacado(SacadoTituloRequestDTOFixture.valido());
         tituloCobrancaRequestDTO.setNumeroDocumentoCobranca(faker.number().digits(15));
         tituloCobrancaRequestDTO.setDataEmissao(new Date());
         tituloCobrancaRequestDTO.setDataVencimento(new Date());

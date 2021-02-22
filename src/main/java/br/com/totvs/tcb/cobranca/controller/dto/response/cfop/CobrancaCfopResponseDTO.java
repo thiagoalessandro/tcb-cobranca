@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @ApiModel
 @NoArgsConstructor
-public class SolicitacaoCfopResponseDTO extends BaseCfopResponseDTO {
+public class CobrancaCfopResponseDTO extends BaseCfopResponseDTO {
 
     private String referenceNumber;
 

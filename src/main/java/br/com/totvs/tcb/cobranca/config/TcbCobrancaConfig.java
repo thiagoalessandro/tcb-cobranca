@@ -1,6 +1,6 @@
 package br.com.totvs.tcb.cobranca.config;
 
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import br.com.totvs.tcb.cobranca.client.interceptor.RequestHandlerInterceptor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,5 +16,9 @@ public class TcbCobrancaConfig {
         return validatorFactoryBean;
     }
 
+    @Bean
+    public RequestHandlerInterceptor requestInterceptor() {
+        return new RequestHandlerInterceptor();
+    }
 
 }

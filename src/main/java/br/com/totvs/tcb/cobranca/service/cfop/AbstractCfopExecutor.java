@@ -10,6 +10,7 @@ import br.com.totvs.tcb.cobranca.service.LogTransacionalService;
 import br.com.totvs.tcb.cobranca.utils.StringUtils;
 import com.google.common.base.Charsets;
 import com.google.common.io.BaseEncoding;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
+@Log4j2
 public abstract class AbstractCfopExecutor<T extends BaseCfopRequestDTO, R extends BaseCfopResponseDTO> extends AbstractPgpEncrytor<T, R> {
 
     @Autowired
@@ -32,11 +34,14 @@ public abstract class AbstractCfopExecutor<T extends BaseCfopRequestDTO, R exten
         R responseDTO;
         try {
             T requestDTO = decrypt(payloadEncrypted);
+            log.info("Processando requestId {}...", requestDTO.getRequestHeader().getRequestId());
+            log.debug(requestDTO.toString());
             String responsePayloadEncrypted = validateRequestDuplicated(requestDTO);
             if (StringUtils.isNoneEmpty(responsePayloadEncrypted))
                 return responsePayloadEncrypted;
             responseDTO = processor(requestDTO);
             responseDTO.generateResponseHeader();
+            log.debug(responseDTO.toString());
             return encrypt(responseDTO);
         } catch (CfopException e) {
             Optional<ErrorCfopEnum> optionalErrorCfopEnum = Arrays.stream(ErrorCfopEnum.values())
@@ -61,11 +66,14 @@ public abstract class AbstractCfopExecutor<T extends BaseCfopRequestDTO, R exten
     }
 
     private String validateRequestDuplicated(T requestDTO) throws CfopException {
+        log.debug("Validando requestId duplicado...");
         try {
-            Optional<LogTransacional> optionalLogTransacional = logTransacionalService.findByFirstRequestId(requestDTO.getRequestHeader().getRequestId());
+            Optional<LogTransacional> optionalLogTransacional = logTransacionalService.findByLastRequestId(requestDTO.getRequestHeader().getRequestId());
             if (optionalLogTransacional.isPresent()) {
                 LogTransacional logTransacional = optionalLogTransacional.get();
                 if (logTransacional.getResponseStatus() == 200) {
+                    log.info("RequestId {} já foi processado anteriormente", requestDTO.getRequestHeader().getRequestId());
+                    log.info("Recuperando retorno...");
                     R responseDeliveredDTO = (R) parseFromJson(new String(BaseEncoding.base64().decode(logTransacional.getResponse()), Charsets.UTF_8), getGenericResponseTypeClass());
                     responseDeliveredDTO.getResponseHeader().setResponseTimestamp(new Date().getTime());
                     return encrypt(responseDeliveredDTO);

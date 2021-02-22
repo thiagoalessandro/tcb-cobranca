@@ -1,4 +1,4 @@
-package br.com.totvs.tcb.cobranca.fixture.dto.request;
+package br.com.totvs.tcb.cobranca.fixture.dto.request.controller;
 
 import br.com.totvs.tcb.cobranca.controller.dto.request.cfop.HeaderCfopRequestDTO;
 import br.com.totvs.tcb.cobranca.fixture.FixtureAbstract;

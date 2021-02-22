@@ -1,10 +1,10 @@
-package br.com.totvs.tcb.cobranca.fixture.dto.request;
+package br.com.totvs.tcb.cobranca.fixture.dto.request.client.processador;
 
 import br.com.totvs.tcb.cobranca.client.processador.dto.request.SacadoTituloRequestDTO;
 import br.com.totvs.tcb.cobranca.domain.DominioTipoInscricao;
 import br.com.totvs.tcb.cobranca.fixture.FixtureAbstract;
 
-public class SacadoBoletoRequestDTOFixture extends FixtureAbstract {
+public class SacadoTituloRequestDTOFixture extends FixtureAbstract {
 
     public static SacadoTituloRequestDTO valido() {
         SacadoTituloRequestDTO sacadoTituloRequestDTO = new SacadoTituloRequestDTO();

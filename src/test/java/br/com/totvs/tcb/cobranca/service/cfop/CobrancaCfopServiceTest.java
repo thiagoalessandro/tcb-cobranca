@@ -1,21 +1,24 @@
 package br.com.totvs.tcb.cobranca.service.cfop;
 
-import br.com.totvs.tcb.cobranca.TcbCobrancaApplicationTests;
 import br.com.totvs.tcb.cobranca.client.processador.dto.response.TituloCobrancaResponseDTO;
 import br.com.totvs.tcb.cobranca.client.processador.service.ProcessadorClientService;
-import br.com.totvs.tcb.cobranca.controller.dto.request.cfop.SolicitacaoCfopRequestDTO;
-import br.com.totvs.tcb.cobranca.controller.dto.response.cfop.SolicitacaoCfopResponseDTO;
+import br.com.totvs.tcb.cobranca.controller.dto.request.cfop.CobrancaCfopRequestDTO;
+import br.com.totvs.tcb.cobranca.controller.dto.response.cfop.CobrancaCfopResponseDTO;
 import br.com.totvs.tcb.cobranca.controller.dto.response.cfop.enums.ErrorCfopEnum;
+import br.com.totvs.tcb.cobranca.encryptor.pgp.PgpEncryptor;
 import br.com.totvs.tcb.cobranca.exceptions.ApiException;
 import br.com.totvs.tcb.cobranca.exceptions.CfopException;
-import br.com.totvs.tcb.cobranca.fixture.dto.request.SolicitacaoCfopRequestDTOFixture;
-import br.com.totvs.tcb.cobranca.fixture.dto.response.CobrancaBoletoResponseDTOFixture;
+import br.com.totvs.tcb.cobranca.fixture.dto.request.client.processador.CobrancaCfopRequestDTOFixture;
+import br.com.totvs.tcb.cobranca.fixture.dto.response.client.processador.TituloCobrancaResponseDTOFixture;
+import br.com.totvs.tcb.cobranca.fixture.model.CobrancaCfopFixture;
 import br.com.totvs.tcb.cobranca.fixture.model.ContaIntegradoraCfopFixture;
-import br.com.totvs.tcb.cobranca.fixture.model.SolicitacaoCfopFixture;
-import br.com.totvs.tcb.cobranca.repository.SolicitacaoCfopRepository;
+import br.com.totvs.tcb.cobranca.repository.CobrancaCfopRepository;
+import br.com.totvs.tcb.cobranca.service.LogTransacionalService;
+import br.com.totvs.tcb.cobranca.utils.ModelMapperUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,13 +30,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-public class SolicitacaoCfopServiceTest extends TcbCobrancaApplicationTests {
+@SpringBootTest(classes = {CobrancaCfopService.class, PgpEncryptor.class, ModelMapperUtils.class})
+public class CobrancaCfopServiceTest {
 
     @Autowired
-    private SolicitacaoCfopService solicitacaoCfopService;
+    private CobrancaCfopService cobrancaCfopService;
 
     @MockBean
-    private SolicitacaoCfopRepository solicitacaoCfopRepository;
+    private CobrancaCfopRepository cobrancaCfopRepository;
 
     @MockBean
     private ProcessadorClientService processadorClientService;
@@ -41,20 +45,26 @@ public class SolicitacaoCfopServiceTest extends TcbCobrancaApplicationTests {
     @MockBean
     private ContaIntegradoraCfopService contaIntegradoraCfopService;
 
+    @MockBean
+    private PgpEncryptor pgpEncryptor;
+
+    @MockBean
+    private LogTransacionalService logTransacionalService;
+
     @Test
     public void solicitacaoCfopSucesso() {
         try {
-            final TituloCobrancaResponseDTO tituloCobrancaResponseDTO = CobrancaBoletoResponseDTOFixture.valido();
-            final SolicitacaoCfopRequestDTO requestDTO = SolicitacaoCfopRequestDTOFixture.valido();
+            final TituloCobrancaResponseDTO tituloCobrancaResponseDTO = TituloCobrancaResponseDTOFixture.valido();
+            final CobrancaCfopRequestDTO requestDTO = CobrancaCfopRequestDTOFixture.valido();
 
             when(contaIntegradoraCfopService.findByContaIntegradora(any())).thenReturn(Optional.of(ContaIntegradoraCfopFixture.valido()));
             when(processadorClientService.registrarCobranca(any())).thenReturn(tituloCobrancaResponseDTO);
-            when(solicitacaoCfopRepository.save(any())).thenReturn(SolicitacaoCfopFixture.valido());
+            when(cobrancaCfopRepository.save(any())).thenReturn(CobrancaCfopFixture.valido());
 
-            SolicitacaoCfopResponseDTO responseDTO = solicitacaoCfopService.processor(requestDTO);
+            CobrancaCfopResponseDTO responseDTO = cobrancaCfopService.processor(requestDTO);
 
             verify(contaIntegradoraCfopService).findByContaIntegradora(any());
-            verify(solicitacaoCfopRepository).save(any());
+            verify(cobrancaCfopRepository).save(any());
             verify(processadorClientService).registrarCobranca(any());
 
             assertNotNull(requestDTO);
@@ -68,8 +78,8 @@ public class SolicitacaoCfopServiceTest extends TcbCobrancaApplicationTests {
     @Test
     public void solicitacaoCfopContaIntegradoraInvalida() {
         try {
-            SolicitacaoCfopRequestDTO requestDTO = SolicitacaoCfopRequestDTOFixture.valido();
-            solicitacaoCfopService.processor(requestDTO);
+            CobrancaCfopRequestDTO requestDTO = CobrancaCfopRequestDTOFixture.valido();
+            cobrancaCfopService.processor(requestDTO);
         } catch (CfopException e) {
             assertEquals(e.getMessage(), ErrorCfopEnum.INVALID_IDENTIFIER.name());
         }

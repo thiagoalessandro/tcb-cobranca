@@ -26,6 +26,7 @@ public abstract class AbstractPgpEncrytor<T extends BaseCfopRequestDTO, R extend
     private PgpEncryptor encryptor;
 
     protected T decrypt(String payloadEncrypted) throws CfopException {
+        log.info("Descriptografando e validando assinatura payload...");
         try {
             log.info("Payload Request Encrypted: {}", payloadEncrypted);
             String payloadDecrypted = encryptor.decrypt(payloadEncrypted);
@@ -39,6 +40,7 @@ public abstract class AbstractPgpEncrytor<T extends BaseCfopRequestDTO, R extend
     }
 
     protected String encrypt(BaseCfopResponseDTO responseDTO) throws CfopException {
+        log.info("Criptografando e assinando payload...");
         try {
             String responseJson = parseToJson(responseDTO);
             mdcResponseBase64(responseJson);

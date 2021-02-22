@@ -1,11 +1,11 @@
-package br.com.totvs.tcb.cobranca.fixture.dto.request;
+package br.com.totvs.tcb.cobranca.fixture.dto.request.client.processador;
 
 import br.com.totvs.tcb.cobranca.domain.DominioTipoInscricao;
 
 import br.com.totvs.tcb.cobranca.client.processador.dto.request.CedenteTituloRequestDTO;
 import br.com.totvs.tcb.cobranca.fixture.FixtureAbstract;
 
-public class CedenteBoletoRequestDTOFixture extends FixtureAbstract {
+public class CedenteTituloRequestDTOFixture extends FixtureAbstract {
 
     public static CedenteTituloRequestDTO valido() {
         CedenteTituloRequestDTO cedenteTituloRequestDTO = new CedenteTituloRequestDTO();
