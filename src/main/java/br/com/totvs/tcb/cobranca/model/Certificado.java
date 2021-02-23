@@ -27,7 +27,7 @@ public class Certificado extends AbstractEntity {
 
     @NotNull(message = "Tipo Certificado é obrigatório")
     @Enumerated(EnumType.STRING)
-    @Column(name = "tp_certificado", length = 12)
+    @Column(name = "tp_certificado", length = 20)
     private DominioTipoCertificado tipoCertificado;
 
     @NotEmpty(message = "Nome Arquivo é obrigatório")
